@@ -1,0 +1,32 @@
+mouth:
+  closed_angle: 90            # angle when mouth is fully closed
+  open_angle: 140             # angle when mouth is fully open
+  open_direction: positive    # 'positive' or 'negative'
+  channel: 0                  # PCA9685 channel used for the mouth
+  smoothing: 0.2              # smoothing factor for envelope response
+
+eyes:
+  channel: 1
+  min_angle: 45
+  max_angle: 120
+  smoothing: 0.3
+
+mic:
+  listen_timeout: 5
+  phrase_timeout: 5
+  device_index: 0
+
+envelope:
+  min_threshold: 0.005        # envelope value for fully closed mouth
+  max_threshold: 0.1          # envelope value for fully open mouth
+
+tts:
+  engine: espeak              # 'coqui' or 'pyttsx3'
+  voice: female               # 'female' or 'male'
+
+llm:
+  engine: openai              # 'openai' or 'local'
+  model: 4.1
+  model_path: /models/model.gguf
+  prompt_file: prompts/system_prompt.txt
+
