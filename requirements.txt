@@ -1,0 +1,9 @@
+sounddevice
+soundfile
+numpy
+pyttsx3
+PyYAML
+openai
+speechrecognition
+adafruit-circuitpython-servokit
+TTS
