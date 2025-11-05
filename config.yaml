@@ -25,8 +25,15 @@ tts:
   voice: female               # 'female' or 'male'
 
 llm:
-  engine: openai              # 'openai' or 'local'
-  model: 4.1
-  model_path: /models/model.gguf
+  engine: openai              # Options: 'openai', 'claude', 'gemini', 'codex', or 'local'
+  model: 4.1                  # For OpenAI: model version (e.g., 4.1 for gpt-4.1)
+  model_path: /models/model.gguf  # For local LLM: path to model file
   prompt_file: prompts/system_prompt.txt
+
+  # Engine-specific notes:
+  # - openai: Requires OPENAI_API_KEY environment variable
+  # - claude: Requires Anthropic CLI (pip install anthropic-cli)
+  # - gemini: Requires Google AI CLI (pip install google-generativeai)
+  # - codex: Requires OpenAI CLI (pip install openai-cli)
+  # - local: Not yet implemented
 
