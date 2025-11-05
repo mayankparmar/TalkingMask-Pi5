@@ -61,6 +61,9 @@ sudo apt install -y python3-dev python3-pip python3-venv
 
 # I2C tools (for PCA9685)
 sudo apt install -y i2c-tools python3-smbus
+
+# GPIO library (required for Raspberry Pi 5)
+sudo apt install -y lgpio python3-lgpio
 ```
 
 ### Enable I2C Interface
@@ -430,6 +433,22 @@ Press `Ctrl+C` to gracefully shut down all threads.
 ---
 
 ## 9. Troubleshooting
+
+### ModuleNotFoundError: No module named 'lgpio'
+
+**This is common on Raspberry Pi 5.** The Adafruit Blinka library requires lgpio:
+
+```bash
+# Install system package
+sudo apt install -y lgpio python3-lgpio
+
+# Activate venv and install Python package
+source venv/bin/activate
+pip install lgpio
+
+# Verify
+python3 -c "import lgpio; print('Success!')"
+```
 
 ### PCA9685 Not Detected
 

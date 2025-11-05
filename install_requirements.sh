@@ -6,7 +6,8 @@ sudo apt update
 echo "Installing system dependencies..."
 sudo apt install -y python3-dev build-essential libasound2-dev portaudio19-dev \
     python3-pyaudio espeak espeak-ng espeak-ng-data libatlas-base-dev libffi-dev \
-    libsndfile1 libportaudio2 ffmpeg sox
+    libsndfile1 libportaudio2 ffmpeg sox \
+    i2c-tools python3-smbus lgpio python3-lgpio
 
 echo "Creating virtual environment (venv)..."
 python3 -m venv venv

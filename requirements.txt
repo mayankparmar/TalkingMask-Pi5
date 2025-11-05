@@ -6,4 +6,5 @@ PyYAML
 openai
 speechrecognition
 adafruit-circuitpython-servokit
+lgpio
 TTS
