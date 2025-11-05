@@ -9,12 +9,23 @@ sudo apt install -y python3-dev build-essential libasound2-dev portaudio19-dev \
     libsndfile1 libportaudio2 ffmpeg sox \
     i2c-tools python3-smbus lgpio python3-lgpio
 
-echo "Creating virtual environment (venv)..."
-python3 -m venv venv
+echo "Creating virtual environment with system site packages..."
+python3 -m venv --system-site-packages venv
 source venv/bin/activate
 
 echo "Installing Python packages..."
 pip install --upgrade pip
-pip install -r requirements.txt
 
-echo "All done"
+# Install packages individually, skipping lgpio (using system package)
+echo "Installing Python dependencies (using system lgpio)..."
+pip install sounddevice soundfile numpy pyttsx3 PyYAML openai speechrecognition adafruit-circuitpython-servokit TTS
+
+echo "Verifying lgpio installation..."
+python3 -c "import lgpio; print('✓ lgpio is accessible from system packages')" || {
+    echo "⚠ Warning: lgpio not found. Installing via pip..."
+    sudo apt install -y swig
+    pip install lgpio
+}
+
+echo "All done! Virtual environment ready."
+echo "To activate: source venv/bin/activate"

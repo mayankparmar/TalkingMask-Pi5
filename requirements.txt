@@ -1,3 +1,6 @@
+# Core dependencies for TalkingMask-Pi5
+# Note: lgpio is installed via system package (python3-lgpio) to avoid build issues on Pi 5
+
 sounddevice
 soundfile
 numpy
@@ -6,5 +9,4 @@ PyYAML
 openai
 speechrecognition
 adafruit-circuitpython-servokit
-lgpio
 TTS

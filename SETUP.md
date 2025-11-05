@@ -195,8 +195,11 @@ chmod +x install_requirements.sh
 ```bash
 cd ~/TalkingMask-Pi5
 
-# Create virtual environment
-python3 -m venv venv
+# Install system packages first
+sudo apt install -y python3-lgpio lgpio i2c-tools python3-smbus
+
+# Create virtual environment with system site packages (for lgpio)
+python3 -m venv --system-site-packages venv
 
 # Activate virtual environment
 source venv/bin/activate
@@ -204,8 +207,12 @@ source venv/bin/activate
 # Upgrade pip
 pip install --upgrade pip
 
-# Install Python packages
-pip install -r requirements.txt
+# Install Python packages (lgpio comes from system)
+pip install sounddevice soundfile numpy pyttsx3 PyYAML openai \
+            speechrecognition adafruit-circuitpython-servokit TTS
+
+# Verify lgpio is accessible
+python3 -c "import lgpio; print('lgpio OK')"
 ```
 
 ### Required Python Packages
@@ -436,13 +443,36 @@ Press `Ctrl+C` to gracefully shut down all threads.
 
 ### ModuleNotFoundError: No module named 'lgpio'
 
-**This is common on Raspberry Pi 5.** The Adafruit Blinka library requires lgpio:
+**This is common on Raspberry Pi 5.** The Adafruit Blinka library requires lgpio.
+
+**Solution 1: Use System Package (Recommended)**
 
 ```bash
-# Install system package
-sudo apt install -y lgpio python3-lgpio
+cd ~/TalkingMask-Pi5
 
-# Activate venv and install Python package
+# Install system package
+sudo apt install -y python3-lgpio lgpio
+
+# Recreate venv with system site packages access
+rm -rf venv
+python3 -m venv --system-site-packages venv
+source venv/bin/activate
+
+# Reinstall dependencies
+pip install sounddevice soundfile numpy pyttsx3 PyYAML openai \
+            speechrecognition adafruit-circuitpython-servokit TTS
+
+# Verify
+python3 -c "import lgpio; print('Success!')"
+```
+
+**Solution 2: Build from Source (If Solution 1 Fails)**
+
+```bash
+# Install SWIG (required to build lgpio)
+sudo apt install -y swig
+
+# Activate venv and install
 source venv/bin/activate
 pip install lgpio
 
