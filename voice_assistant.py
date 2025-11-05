@@ -1,29 +1,39 @@
+"""Speech recognition using Google Speech API."""
+
 import speech_recognition as sr
-import time
+
 
 class VoiceAssistant:
+    """Captures and transcribes user speech via microphone."""
+
     def __init__(self, config):
+        """
+        Initialise voice assistant with microphone configuration.
+
+        Args:
+            config: Configuration dictionary containing microphone settings
+        """
         self.recognizer = sr.Recognizer()
         self.listen_timeout = config.get("mic", {}).get("listen_timeout", 5)
         self.phrase_timeout = config.get("mic", {}).get("phrase_timeout", 5)
         self.device_index = config.get("mic", {}).get("device_index", 0)
 
-
-    def _get_default_microphone(self):
-        try:
-            for idx, name in enumerate(sr.Microphone.list_microphone_names()):
-                if "usb" in name.lower() or "mic" in name.lower():
-                    return idx
-        except Exception as e:
-            print("Microphone detection failed:", e)
-        return None
-
     def listen(self):
+        """
+        Listen for user speech and convert to text.
+
+        Returns:
+            Lowercase transcribed text, or empty string if recognition fails
+        """
         try:
             with sr.Microphone(device_index=self.device_index) as source:
-                print("?? Listening...")
+                print("Listening...")
                 self.recognizer.adjust_for_ambient_noise(source, duration=1)
-                audio = self.recognizer.listen(source, timeout=self.listen_timeout, phrase_time_limit=self.phrase_timeout)
+                audio = self.recognizer.listen(
+                    source,
+                    timeout=self.listen_timeout,
+                    phrase_time_limit=self.phrase_timeout
+                )
                 text = self.recognizer.recognize_google(audio)
                 return text.lower()
         except sr.WaitTimeoutError:

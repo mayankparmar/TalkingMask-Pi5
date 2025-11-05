@@ -1,3 +1,8 @@
+"""
+TalkingMask-Pi5 - Main entry point for Bob the animatronic mask.
+Orchestrates voice interaction, GPT responses, servo control, and face tracking.
+"""
+
 from config_loader import load_config
 from gpt_assistant import GPTAssistant
 from voice_assistant import VoiceAssistant
@@ -8,10 +13,12 @@ from eyes_controller import EyesController
 from cam import WebcamStream
 import time
 
+
 def main():
+    """Initialise and run the TalkingMask system."""
     config = load_config()
 
-    # Core modules
+    # Initialise modules
     gpt = GPTAssistant(config)
     voice = VoiceAssistant(config)
     mouth = MouthController(config)
@@ -20,36 +27,36 @@ def main():
     eyes = EyesController(config)
     cam = WebcamStream(eyes_controller=eyes)
 
-    # Start threaded components
+    # Start background threads
     envelope.start()
     mouth.start()
     eyes.start()
     cam.start()
 
     try:
-        print("?? Starting conversation loop...")
+        print("Starting conversation loop...")
         while True:
             spoken = voice.listen()
             if spoken:
-                print(f"?? You said: {spoken}")
+                print(f"You said: {spoken}")
                 reply = gpt.ask(spoken)
-                print(f"?? Replying: {reply}")
-
-                # Begin mouth-sync speech output
+                print(f"Replying: {reply}")
                 tts.speak(reply)
             else:
-                print("?? No input. Prompting again.")
+                print("No input detected.")
                 tts.speak("Can you repeat that?")
 
             time.sleep(1.0)
 
     except KeyboardInterrupt:
-        print("?? Stopped by user.")
+        print("\nStopped by user.")
     finally:
+        # Clean shutdown of all threads
         envelope.stop()
         mouth.stop()
         eyes.stop()
         cam.stop()
+
 
 if __name__ == "__main__":
     main()
