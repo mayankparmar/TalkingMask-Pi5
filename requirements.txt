@@ -1,5 +1,7 @@
 # Core dependencies for TalkingMask-Pi5
 # Note: lgpio is installed via system package (python3-lgpio) to avoid build issues on Pi 5
+# Note: TTS (Coqui) is optional - only needed if using tts.engine: coqui in config.yaml
+#       For Python 3.13+, use espeak instead as TTS doesn't support it yet
 
 sounddevice
 soundfile
@@ -9,4 +11,7 @@ PyYAML
 openai
 speechrecognition
 adafruit-circuitpython-servokit
-TTS
+
+# Optional: Coqui TTS (requires Python < 3.13)
+# Uncomment the line below if using Python 3.9-3.11 and want neural TTS
+# TTS

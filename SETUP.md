@@ -226,8 +226,13 @@ From `requirements.txt`:
 - `openai` - OpenAI GPT API client
 - `speechrecognition` - Google Speech API
 - `adafruit-circuitpython-servokit` - PCA9685 servo control
-- `TTS` - Coqui neural TTS
+- `TTS` - Coqui neural TTS (optional, requires Python < 3.13)
 - `opencv-python` - Computer vision (may need system package instead)
+
+**Note on Python Version:**
+- Python 3.13+: Use `espeak` for TTS (Coqui TTS not yet supported)
+- Python 3.9-3.11: Can use either `coqui` or `espeak` for TTS
+- Python < 3.9: Not tested
 
 ---
 
@@ -478,6 +483,42 @@ pip install lgpio
 
 # Verify
 python3 -c "import lgpio; print('Success!')"
+```
+
+### ERROR: No matching distribution found for TTS
+
+**This happens on Python 3.13+.** Coqui TTS doesn't support Python 3.13 yet.
+
+**Solution: Use eSpeak instead**
+
+```bash
+# In config.yaml, change:
+tts:
+  engine: espeak  # Change from 'coqui' to 'espeak'
+  voice: female
+
+# eSpeak is already installed via system packages
+# Just run the system normally
+python3 main.py
+```
+
+**Alternative: Use Python 3.11**
+
+If you need neural TTS (Coqui):
+
+```bash
+# Install Python 3.11 (if available)
+sudo apt install python3.11 python3.11-venv
+
+# Recreate venv with Python 3.11
+cd ~/TalkingMask-Pi5
+rm -rf venv
+python3.11 -m venv --system-site-packages venv
+source venv/bin/activate
+
+# Install dependencies including TTS
+pip install sounddevice soundfile numpy pyttsx3 PyYAML openai \
+            speechrecognition adafruit-circuitpython-servokit TTS
 ```
 
 ### PCA9685 Not Detected

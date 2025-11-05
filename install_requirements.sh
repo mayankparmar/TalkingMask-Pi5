@@ -18,7 +18,11 @@ pip install --upgrade pip
 
 # Install packages individually, skipping lgpio (using system package)
 echo "Installing Python dependencies (using system lgpio)..."
-pip install sounddevice soundfile numpy pyttsx3 PyYAML openai speechrecognition adafruit-circuitpython-servokit TTS
+pip install sounddevice soundfile numpy pyttsx3 PyYAML openai speechrecognition adafruit-circuitpython-servokit
+
+# Try to install TTS (Coqui) - only works on Python < 3.13
+echo "Attempting to install Coqui TTS (optional, for neural voices)..."
+pip install TTS 2>/dev/null && echo "✓ TTS installed" || echo "⚠ TTS skipped (requires Python < 3.13). Using eSpeak instead."
 
 echo "Verifying lgpio installation..."
 python3 -c "import lgpio; print('✓ lgpio is accessible from system packages')" || {

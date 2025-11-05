@@ -24,12 +24,19 @@ class TTSManager:
         self.mouth = mouth_controller
 
         if self.engine_type == "coqui":
-            from TTS.api import TTS
-            model_name = {
-                "female": "tts_models/en/ljspeech/tacotron2-DDC",
-                "male": "tts_models/en/vctk/vits"
-            }.get(self.voice_variant, "tts_models/en/ljspeech/tacotron2-DDC")
-            self.tts = TTS(model_name=model_name)
+            try:
+                from TTS.api import TTS
+                model_name = {
+                    "female": "tts_models/en/ljspeech/tacotron2-DDC",
+                    "male": "tts_models/en/vctk/vits"
+                }.get(self.voice_variant, "tts_models/en/ljspeech/tacotron2-DDC")
+                self.tts = TTS(model_name=model_name)
+            except ImportError:
+                raise ImportError(
+                    "Coqui TTS not installed. Either:\n"
+                    "1. Install TTS: pip install TTS (requires Python < 3.13)\n"
+                    "2. Change config.yaml tts.engine to 'espeak'"
+                )
         elif self.engine_type == "espeak":
             pass  # Uses subprocess for synthesis
         else:
