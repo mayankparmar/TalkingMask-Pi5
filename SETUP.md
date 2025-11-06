@@ -211,7 +211,7 @@ pip install --upgrade pip wheel setuptools
 pip install --no-binary=:all: lgpio
 
 # Install other Python packages
-pip install sounddevice soundfile numpy pyttsx3 PyYAML openai \
+pip install sounddevice soundfile pyaudio numpy pyttsx3 PyYAML openai \
             speechrecognition adafruit-circuitpython-servokit
 
 # Verify lgpio works
@@ -223,11 +223,13 @@ python3 -c "import lgpio; print('lgpio OK')"
 From `requirements.txt`:
 - `sounddevice` - Real-time audio I/O
 - `soundfile` - WAV file handling
+- `pyaudio` - Audio recording and playback
 - `numpy` - Numerical operations
 - `pyttsx3` - Alternative TTS engine
 - `PyYAML` - Configuration parsing
 - `openai` - OpenAI GPT API client
 - `speechrecognition` - Google Speech API
+- `lgpio` - GPIO library for Raspberry Pi 5
 - `adafruit-circuitpython-servokit` - PCA9685 servo control
 - `TTS` - Coqui neural TTS (optional, requires Python < 3.13)
 - `opencv-python` - Computer vision (may need system package instead)

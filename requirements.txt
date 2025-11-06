@@ -5,6 +5,7 @@
 
 sounddevice
 soundfile
+pyaudio
 numpy
 pyttsx3
 PyYAML

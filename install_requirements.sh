@@ -20,7 +20,7 @@ echo "Installing lgpio from source..."
 pip install --no-binary=:all: lgpio
 
 echo "Installing core Python dependencies..."
-pip install sounddevice soundfile numpy pyttsx3 PyYAML openai speechrecognition adafruit-circuitpython-servokit
+pip install sounddevice soundfile pyaudio numpy pyttsx3 PyYAML openai speechrecognition adafruit-circuitpython-servokit
 
 # Try to install TTS (Coqui) - only works on Python < 3.13
 echo "Attempting to install Coqui TTS (optional, for neural voices)..."
