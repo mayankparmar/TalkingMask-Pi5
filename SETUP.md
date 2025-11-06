@@ -212,7 +212,10 @@ pip install --no-binary=:all: lgpio
 
 # Install other Python packages
 pip install sounddevice soundfile pyaudio numpy pyttsx3 PyYAML openai \
-            speechrecognition adafruit-circuitpython-servokit
+            speechrecognition adafruit-circuitpython-servokit opencv-python
+
+# Optional: Install Coqui TTS if using Python < 3.13
+# pip install TTS
 
 # Verify lgpio works
 python3 -c "import lgpio; print('lgpio OK')"
@@ -231,8 +234,8 @@ From `requirements.txt`:
 - `speechrecognition` - Google Speech API
 - `lgpio` - GPIO library for Raspberry Pi 5
 - `adafruit-circuitpython-servokit` - PCA9685 servo control
+- `opencv-python` - Computer vision and face detection
 - `TTS` - Coqui neural TTS (optional, requires Python < 3.13)
-- `opencv-python` - Computer vision (may need system package instead)
 
 **Note on Python Version:**
 - Python 3.13+: Use `espeak` for TTS (Coqui TTS not yet supported)
@@ -497,24 +500,68 @@ tts:
 python3 main.py
 ```
 
-**Alternative: Use Python 3.11**
+**Alternative TTS Options for Python 3.13+:**
 
-If you need neural TTS (Coqui):
+See the "Alternative TTS Libraries" section below for modern, Pi 5-compatible options.
 
+### Alternative TTS Libraries for Raspberry Pi 5
+
+If you're using Python 3.13+ and want better voice quality than eSpeak, consider these alternatives:
+
+#### 1. **Piper TTS** (Recommended for Pi 5)
+- **Quality**: Excellent, natural-sounding voices
+- **Performance**: Optimized for Raspberry Pi, runs in real-time
+- **Python Support**: Python 3.13+ compatible
+- **Installation**:
 ```bash
-# Install Python 3.11 (if available)
-sudo apt install python3.11 python3.11-venv
-
-# Recreate venv with Python 3.11
-cd ~/TalkingMask-Pi5
-rm -rf venv
-python3.11 -m venv --system-site-packages venv
-source venv/bin/activate
-
-# Install dependencies including TTS
-pip install sounddevice soundfile numpy pyttsx3 PyYAML openai \
-            speechrecognition adafruit-circuitpython-servokit TTS
+pip install piper-tts
 ```
+- **Voices**: Multiple languages and accents available
+- **Website**: https://github.com/rhasspy/piper
+
+#### 2. **MeloTTS**
+- **Quality**: High-quality, multilingual
+- **Performance**: Moderate CPU usage, suitable for Pi 5
+- **Python Support**: Python 3.13+ compatible
+- **Installation**:
+```bash
+pip install melotts
+```
+- **Website**: https://github.com/myshell-ai/MeloTTS
+
+#### 3. **gTTS (Google Text-to-Speech)**
+- **Quality**: Natural Google voices
+- **Performance**: Very lightweight (cloud-based)
+- **Python Support**: All Python versions
+- **Installation**:
+```bash
+pip install gtts
+```
+- **Note**: Requires internet connection
+- **Website**: https://github.com/pndurette/gTTS
+
+#### 4. **Bark** (High Quality, Resource Intensive)
+- **Quality**: Extremely natural, with emotion and tone
+- **Performance**: Heavy - may be slow on Pi 5
+- **Python Support**: Python 3.9+
+- **Installation**:
+```bash
+pip install bark
+```
+- **Note**: Requires significant RAM and processing time
+- **Website**: https://github.com/suno-ai/bark
+
+#### 5. **StyleTTS2** (Best Quality)
+- **Quality**: State-of-the-art, indistinguishable from human
+- **Performance**: Very heavy - challenging on Pi 5
+- **Python Support**: Python 3.9+
+- **Note**: Consider for offline rendering, not real-time
+- **Website**: https://github.com/yl4579/StyleTTS2
+
+#### Recommended for TalkingMask:
+**Piper TTS** is the best balance of quality and performance for Raspberry Pi 5. It's specifically optimized for embedded devices and produces excellent results.
+
+To integrate Piper TTS into TalkingMask, you would need to create a new TTS engine option in `tts_manager.py`.
 
 ### PCA9685 Not Detected
 

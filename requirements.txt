@@ -13,7 +13,8 @@ openai
 speechrecognition
 lgpio
 adafruit-circuitpython-servokit
+opencv-python
 
 # Optional: Coqui TTS (requires Python < 3.13)
-# Uncomment the line below if using Python 3.9-3.11 and want neural TTS
+# Install manually if using Python 3.9-3.11: pip install TTS
 # TTS
