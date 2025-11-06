@@ -70,20 +70,41 @@ class TTSManager:
                 os.remove(f.name)
 
         elif self.engine_type == "piper":
-            # Load voice (cached after first load)
-            model_file = os.path.join(self.piper_model_path, f"{self.voice_variant}.onnx")
-            voice = self.PiperVoice.load(model_file)
+            try:
+                # Load voice (cached after first load)
+                model_file = os.path.join(self.piper_model_path, f"{self.voice_variant}.onnx")
+                voice = self.PiperVoice.load(model_file)
 
-            # Generate to temporary file
-            with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
-                wav_path = f.name
+                # Generate to temporary file
+                with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
+                    wav_path = f.name
 
-            with open(wav_path, "wb") as f:
-                voice.synthesize(text, f)
+                # Generate audio using Piper
+                with open(wav_path, "wb") as f:
+                    voice.synthesize(text, f)
 
-            # Play with mouth sync and clean up
-            self._play_and_sync(wav_path)
-            os.remove(wav_path)
+                # Verify file was created and has content
+                if not os.path.exists(wav_path):
+                    raise FileNotFoundError(f"Piper failed to create WAV file: {wav_path}")
+
+                if os.path.getsize(wav_path) == 0:
+                    raise ValueError("Piper generated empty WAV file")
+
+                # Play with mouth sync and clean up
+                self._play_and_sync(wav_path)
+                os.remove(wav_path)
+
+            except FileNotFoundError as e:
+                print(f"Error: Piper voice model not found: {model_file}")
+                print(f"Make sure voice files are in: {self.piper_model_path}")
+                print(f"Run: ./download_piper_voices.sh")
+                raise
+            except Exception as e:
+                print(f"Error with Piper TTS: {e}")
+                # Clean up temp file if it exists
+                if 'wav_path' in locals() and os.path.exists(wav_path):
+                    os.remove(wav_path)
+                raise
 
         elif self.engine_type == "espeak":
             with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
