@@ -1,6 +1,7 @@
 """Text-to-speech manager with mouth synchronisation."""
 
 import os
+import wave
 import tempfile
 import numpy as np
 import soundfile as sf
@@ -79,9 +80,9 @@ class TTSManager:
                 with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
                     wav_path = f.name
 
-                # Generate audio using Piper
-                with open(wav_path, "wb") as f:
-                    voice.synthesize(text, f)
+                # Generate audio using Piper with wave module
+                with wave.open(wav_path, "wb") as f:
+                    voice.synthesize_wav(text, f)
 
                 # Verify file was created and has content
                 if not os.path.exists(wav_path):
