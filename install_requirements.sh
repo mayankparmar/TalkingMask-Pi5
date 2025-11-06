@@ -20,14 +20,16 @@ echo "Installing lgpio from source..."
 pip install --no-binary=:all: lgpio
 
 echo "Installing core Python dependencies..."
-pip install sounddevice soundfile pyaudio numpy pyttsx3 PyYAML openai speechrecognition adafruit-circuitpython-servokit opencv-python
+pip install sounddevice soundfile pyaudio numpy pyttsx3 PyYAML openai speechrecognition adafruit-circuitpython-servokit opencv-python piper-tts
 
 # Try to install TTS (Coqui) - only works on Python < 3.13
 echo ""
-echo "Attempting to install Coqui TTS (optional, for neural voices)..."
+echo "Attempting to install Coqui TTS (optional)..."
 pip install TTS 2>/dev/null && echo "✓ Coqui TTS installed successfully" || echo "⚠ Coqui TTS skipped (requires Python < 3.13)"
-echo "  Note: If TTS was skipped, system uses eSpeak (configured in config.yaml)"
-echo "  For better quality TTS on Python 3.13+, consider: piper-tts or bark"
+echo ""
+echo "✓ Piper TTS installed (default TTS engine)"
+echo "  Download voices to models/piper/ directory"
+echo "  See PIPER_TTS_GUIDE.md for voice options and download instructions"
 
 echo "Verifying lgpio installation..."
 python3 -c "import lgpio; print('✓ lgpio installed successfully')" || {

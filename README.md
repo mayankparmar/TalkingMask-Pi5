@@ -9,7 +9,7 @@ An AI-powered animatronic mask named "Bob" featuring voice interaction, face tra
 - 👄 **Mouth Synchronisation** - Real-time audio envelope detection
 - 👀 **Face Tracking** - Webcam-based eye movement
 - 🔧 **Hardware Control** - PCA9685 PWM servo driver
-- 🔊 **Text-to-Speech** - Coqui TTS or eSpeak synthesis
+- 🔊 **Text-to-Speech** - Piper TTS (natural voices), eSpeak, or Coqui TTS
 
 ## Hardware Requirements
 
@@ -36,7 +36,21 @@ chmod +x install_requirements.sh
 ./install_requirements.sh
 ```
 
-### 3. Configure
+### 3. Download Piper TTS Voices
+
+```bash
+chmod +x download_piper_voices.sh
+./download_piper_voices.sh
+```
+
+This downloads 3 high-quality voices (~157 MB total):
+- Scottish female (Alba) - **Default**
+- British male (Alan)
+- American female (Lessac)
+
+See [PIPER_TTS_GUIDE.md](PIPER_TTS_GUIDE.md) for more voice options.
+
+### 4. Configure
 
 Edit `config.yaml` to set your LLM provider and servo settings.
 
@@ -45,7 +59,7 @@ Set your API key:
 export OPENAI_API_KEY="your-key-here"
 ```
 
-### 4. Run
+### 5. Run
 
 ```bash
 source venv/bin/activate
@@ -66,6 +80,8 @@ The complete guide includes:
 
 ## Configuration
 
+### LLM Provider
+
 Choose your LLM provider in `config.yaml`:
 
 ```yaml
@@ -81,6 +97,22 @@ Supported engines:
 - **gemini** - Google Gemini (requires Google AI CLI)
 - **codex** - OpenAI Codex (requires OpenAI CLI)
 - **local** - Local LLM (not yet implemented)
+
+### TTS Engine
+
+Choose your text-to-speech engine:
+
+```yaml
+tts:
+  engine: piper               # Options: piper, espeak, coqui
+  voice: en_GB-alba-medium    # Voice model name
+  model_path: models/piper    # Voice model directory
+```
+
+Supported engines:
+- **piper** - Natural neural voices (recommended, default)
+- **espeak** - Lightweight robotic voice
+- **coqui** - Neural TTS (requires Python < 3.13)
 
 ## Project Structure
 

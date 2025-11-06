@@ -21,8 +21,18 @@ envelope:
   max_threshold: 0.1          # envelope value for fully open mouth
 
 tts:
-  engine: espeak              # 'coqui' or 'pyttsx3'
-  voice: female               # 'female' or 'male'
+  engine: piper               # Options: 'piper', 'espeak', 'coqui'
+  voice: en_GB-alba-medium    # For piper: model name (e.g., en_GB-alba-medium, en_GB-alan-medium, en_US-lessac-medium)
+                              # For espeak: 'female' or 'male'
+                              # For coqui: 'female' or 'male'
+  model_path: models/piper    # Directory containing Piper voice models (.onnx files)
+
+  # Piper voice recommendations (download from https://huggingface.co/rhasspy/piper-voices):
+  # - en_GB-alba-medium: Scottish female, natural, 31MB (recommended)
+  # - en_GB-alan-medium: British male, warm tone, 63MB
+  # - en_US-lessac-medium: American female, professional, 63MB
+  # - en_US-ryan-medium: American male, clear, 63MB
+  # See PIPER_TTS_GUIDE.md for complete voice list
 
 llm:
   engine: openai              # Options: 'openai', 'claude', 'gemini', 'codex', or 'local'

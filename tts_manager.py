@@ -35,12 +35,26 @@ class TTSManager:
                 raise ImportError(
                     "Coqui TTS not installed. Either:\n"
                     "1. Install TTS: pip install TTS (requires Python < 3.13)\n"
-                    "2. Change config.yaml tts.engine to 'espeak'"
+                    "2. Change config.yaml tts.engine to 'espeak' or 'piper'"
+                )
+        elif self.engine_type == "piper":
+            try:
+                from piper import PiperVoice
+                self.PiperVoice = PiperVoice
+                # Get model path from config
+                self.piper_model_path = config["tts"].get("model_path", "models/piper")
+                # voice_variant for piper should be the full model name (e.g., en_GB-alba-medium)
+                print(f"Piper TTS: Loading voice {self.voice_variant}...")
+            except ImportError:
+                raise ImportError(
+                    "Piper TTS not installed. Install with:\n"
+                    "pip install piper-tts\n"
+                    "Then download voice models to models/piper/ directory"
                 )
         elif self.engine_type == "espeak":
             pass  # Uses subprocess for synthesis
         else:
-            raise ValueError("Unsupported TTS engine.")
+            raise ValueError(f"Unsupported TTS engine: {self.engine_type}")
 
     def speak(self, text):
         """
@@ -54,6 +68,22 @@ class TTSManager:
                 self.tts.tts_to_file(text=text, file_path=f.name)
                 self._play_and_sync(f.name)
                 os.remove(f.name)
+
+        elif self.engine_type == "piper":
+            # Load voice (cached after first load)
+            model_file = os.path.join(self.piper_model_path, f"{self.voice_variant}.onnx")
+            voice = self.PiperVoice.load(model_file)
+
+            # Generate to temporary file
+            with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
+                wav_path = f.name
+
+            with open(wav_path, "wb") as f:
+                voice.synthesize(text, f)
+
+            # Play with mouth sync and clean up
+            self._play_and_sync(wav_path)
+            os.remove(wav_path)
 
         elif self.engine_type == "espeak":
             with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
