@@ -2,6 +2,10 @@
 
 # Piper TTS Voice Downloader for TalkingMask-Pi5
 # Downloads recommended voice models from Hugging Face
+#
+# NOTE: This script is now integrated into install_requirements.sh
+# You only need to run this if you want to download additional voices
+# or re-download voices that were deleted.
 
 VOICE_DIR="models/piper"
 mkdir -p "$VOICE_DIR"

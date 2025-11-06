@@ -37,5 +37,63 @@ python3 -c "import lgpio; print('✓ lgpio installed successfully')" || {
     exit 1
 }
 
-echo "All done! Virtual environment ready."
-echo "To activate: source venv/bin/activate"
+echo ""
+echo "========================================"
+echo "Downloading Piper TTS Voice Models"
+echo "========================================"
+echo ""
+
+VOICE_DIR="models/piper"
+mkdir -p "$VOICE_DIR"
+
+echo "Downloading 3 high-quality voices to: $VOICE_DIR"
+echo "Total size: ~157 MB"
+echo ""
+
+cd "$VOICE_DIR"
+
+# Alba - Scottish female (medium) - DEFAULT
+echo "[1/3] Downloading en_GB-alba-medium (Scottish female, 31MB)..."
+wget -q --show-progress https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/alba/medium/en_GB-alba-medium.onnx
+wget -q https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/alba/medium/en_GB-alba-medium.onnx.json
+ln -sf en_GB-alba-medium.onnx.json en_GB-alba-medium.json
+echo "✓ Alba (Scottish female) downloaded"
+echo ""
+
+# Alan - British male (medium)
+echo "[2/3] Downloading en_GB-alan-medium (British male, 63MB)..."
+wget -q --show-progress https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/alan/medium/en_GB-alan-medium.onnx
+wget -q https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/alan/medium/en_GB-alan-medium.onnx.json
+ln -sf en_GB-alan-medium.onnx.json en_GB-alan-medium.json
+echo "✓ Alan (British male) downloaded"
+echo ""
+
+# Lessac - American female (medium)
+echo "[3/3] Downloading en_US-lessac-medium (American female, 63MB)..."
+wget -q --show-progress https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/lessac/medium/en_US-lessac-medium.onnx
+wget -q https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/lessac/medium/en_US-lessac-medium.onnx.json
+ln -sf en_US-lessac-medium.onnx.json en_US-lessac-medium.json
+echo "✓ Lessac (American female) downloaded"
+echo ""
+
+cd ~/TalkingMask-Pi5
+
+echo "========================================"
+echo "✓ Installation Complete!"
+echo "========================================"
+echo ""
+echo "All dependencies installed:"
+echo "  ✓ System packages"
+echo "  ✓ Python packages (including piper-tts)"
+echo "  ✓ Piper TTS voices (3 voices in models/piper/)"
+echo "  ✓ lgpio verified"
+echo ""
+echo "Default voice: en_GB-alba-medium (Scottish female)"
+echo ""
+echo "To run TalkingMask:"
+echo "  1. Set your OpenAI API key: export OPENAI_API_KEY='your-key'"
+echo "  2. Activate virtual environment: source venv/bin/activate"
+echo "  3. Run: python3 main.py"
+echo ""
+echo "See README.md for more information."
+echo ""

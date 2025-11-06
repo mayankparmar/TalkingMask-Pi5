@@ -180,14 +180,38 @@ git checkout claude/explore-codebase-011CUqCqhRcLYJeRF1NxdnD2
 
 ### Automated Installation (Recommended)
 
+**This single script does everything:**
+- Installs all system dependencies
+- Creates Python virtual environment
+- Installs all Python packages (including lgpio and piper-tts)
+- Downloads Piper TTS voices (Alba, Alan, Lessac)
+- Verifies installation
+
 ```bash
 cd ~/TalkingMask-Pi5
 
 # Make installer executable
 chmod +x install_requirements.sh
 
-# Run installer (creates venv and installs packages)
+# Run automated installer (10-15 minutes depending on internet speed)
 ./install_requirements.sh
+```
+
+**What gets installed:**
+- System packages: Python dev tools, audio libraries, I2C tools, SWIG, etc.
+- Python packages: All requirements including piper-tts, opencv, lgpio, etc.
+- Piper voices: 3 high-quality voices (~157 MB total)
+
+**After installation completes:**
+```bash
+# Set your OpenAI API key
+export OPENAI_API_KEY="your-key-here"
+
+# Activate virtual environment
+source venv/bin/activate
+
+# Run TalkingMask
+python3 main.py
 ```
 
 ### Manual Installation (Alternative)

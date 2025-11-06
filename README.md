@@ -2,6 +2,18 @@
 
 An AI-powered animatronic mask named "Bob" featuring voice interaction, face tracking, and servo-controlled movement.
 
+## One-Command Setup
+
+```bash
+git clone https://github.com/mayankparmar/TalkingMask-Pi5.git
+cd TalkingMask-Pi5
+chmod +x install_requirements.sh && ./install_requirements.sh
+export OPENAI_API_KEY="your-key-here"
+source venv/bin/activate && python3 main.py
+```
+
+The installation script automatically handles **everything**: system dependencies, Python packages, and voice model downloads.
+
 ## Features
 
 - 🎤 **Voice Interaction** - Speech recognition via Google Speech API
@@ -29,42 +41,40 @@ git clone https://github.com/mayankparmar/TalkingMask-Pi5.git
 cd TalkingMask-Pi5
 ```
 
-### 2. Install Dependencies
+### 2. Run Automated Installation
+
+**This single script installs everything automatically:**
+- All system dependencies
+- Python virtual environment
+- All Python packages
+- Piper TTS voices (3 high-quality voices, ~157 MB)
 
 ```bash
 chmod +x install_requirements.sh
 ./install_requirements.sh
 ```
 
-### 3. Download Piper TTS Voices
-
-```bash
-chmod +x download_piper_voices.sh
-./download_piper_voices.sh
-```
-
-This downloads 3 high-quality voices (~157 MB total):
-- Scottish female (Alba) - **Default**
+The installer downloads:
+- Scottish female (Alba) - **Default voice**
 - British male (Alan)
 - American female (Lessac)
 
-See [PIPER_TTS_GUIDE.md](PIPER_TTS_GUIDE.md) for more voice options.
+See [PIPER_TTS_GUIDE.md](PIPER_TTS_GUIDE.md) for additional voice options.
 
-### 4. Configure
+### 3. Set API Key
 
-Edit `config.yaml` to set your LLM provider and servo settings.
-
-Set your API key:
 ```bash
 export OPENAI_API_KEY="your-key-here"
 ```
 
-### 5. Run
+### 4. Run TalkingMask
 
 ```bash
 source venv/bin/activate
 python3 main.py
 ```
+
+That's it! The mask will now speak with Alba's natural Scottish voice.
 
 ## Complete Setup Guide
 
