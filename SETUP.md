@@ -62,8 +62,8 @@ sudo apt install -y python3-dev python3-pip python3-venv
 # I2C tools (for PCA9685)
 sudo apt install -y i2c-tools python3-smbus
 
-# GPIO library (required for Raspberry Pi 5)
-sudo apt install -y lgpio python3-lgpio
+# GPIO library build dependencies (required for Raspberry Pi 5)
+sudo apt install -y swig liblgpio-dev
 ```
 
 ### Enable I2C Interface
@@ -195,23 +195,26 @@ chmod +x install_requirements.sh
 ```bash
 cd ~/TalkingMask-Pi5
 
-# Install system packages first
-sudo apt install -y python3-lgpio lgpio i2c-tools python3-smbus
+# Install system packages first (including lgpio build dependencies)
+sudo apt install -y i2c-tools python3-smbus swig liblgpio-dev
 
-# Create virtual environment with system site packages (for lgpio)
-python3 -m venv --system-site-packages venv
+# Create virtual environment
+python3 -m venv venv
 
 # Activate virtual environment
 source venv/bin/activate
 
-# Upgrade pip
-pip install --upgrade pip
+# Upgrade build tools
+pip install --upgrade pip wheel setuptools
 
-# Install Python packages (lgpio comes from system)
+# Install lgpio from source (required for Pi 5)
+pip install --no-binary=:all: lgpio
+
+# Install other Python packages
 pip install sounddevice soundfile numpy pyttsx3 PyYAML openai \
-            speechrecognition adafruit-circuitpython-servokit TTS
+            speechrecognition adafruit-circuitpython-servokit
 
-# Verify lgpio is accessible
+# Verify lgpio works
 python3 -c "import lgpio; print('lgpio OK')"
 ```
 
@@ -450,40 +453,30 @@ Press `Ctrl+C` to gracefully shut down all threads.
 
 **This is common on Raspberry Pi 5.** The Adafruit Blinka library requires lgpio.
 
-**Solution 1: Use System Package (Recommended)**
+**Solution: Build lgpio from source with proper dependencies**
 
 ```bash
+# Install required system packages
+sudo apt install -y swig liblgpio-dev
+
+# Activate virtual environment
 cd ~/TalkingMask-Pi5
-
-# Install system package
-sudo apt install -y python3-lgpio lgpio
-
-# Recreate venv with system site packages access
-rm -rf venv
-python3 -m venv --system-site-packages venv
 source venv/bin/activate
 
-# Reinstall dependencies
-pip install sounddevice soundfile numpy pyttsx3 PyYAML openai \
-            speechrecognition adafruit-circuitpython-servokit TTS
+# Upgrade build tools
+pip install --upgrade pip wheel setuptools
+
+# Install lgpio from source (not prebuilt binary)
+pip install --no-binary=:all: lgpio
 
 # Verify
 python3 -c "import lgpio; print('Success!')"
 ```
 
-**Solution 2: Build from Source (If Solution 1 Fails)**
-
-```bash
-# Install SWIG (required to build lgpio)
-sudo apt install -y swig
-
-# Activate venv and install
-source venv/bin/activate
-pip install lgpio
-
-# Verify
-python3 -c "import lgpio; print('Success!')"
-```
+**Why this works:**
+- `swig` - Required to generate Python bindings
+- `liblgpio-dev` - Development headers for lgpio library
+- `--no-binary=:all:` - Forces pip to build from source instead of using incompatible prebuilt wheels
 
 ### ERROR: No matching distribution found for TTS
 
